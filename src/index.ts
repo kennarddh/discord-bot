@@ -1,7 +1,9 @@
 import 'dotenv/config'
 
 import { Client, Collection, Events, GatewayIntentBits } from 'discord.js'
-import Ping from './Commands/Ping.js'
+
+import { ICommand } from './Commands/Types.js'
+import Commands from './Commands/index.js'
 
 // Create a new client instance
 const client = new Client({
@@ -28,20 +30,42 @@ const client = new Client({
 	],
 })
 
+const commands = new Collection<string, ICommand>()
+
+for (const command of Commands) {
+	commands.set(command.data.name, command)
+}
+
 client.once(Events.ClientReady, botClient => {
 	console.log(`Ready! Logged in as ${botClient.user.tag}`)
 })
 
-client.on('messageCreate', async message => {
-	if (!message.content.startsWith('!')) return
+client.on(Events.InteractionCreate, async interaction => {
+	if (!interaction.isChatInputCommand()) return
 
-	if (message.author.bot) return
+	const command = commands.get(interaction.commandName)
 
-	const command = message.content.substring(1)
+	if (!command)
+		return void interaction.reply(
+			`No command matching ${interaction.commandName} was found.`
+		)
 
-	console.log(command, message.mentions)
-
-	if (command.startsWith('ping')) message.channel.send('Pong')
+	try {
+		await command.execute(interaction)
+	} catch (error) {
+		console.error(error)
+		if (interaction.replied || interaction.deferred) {
+			await interaction.followUp({
+				content: 'There was an error while executing this command!',
+				ephemeral: true,
+			})
+		} else {
+			await interaction.reply({
+				content: 'There was an error while executing this command!',
+				ephemeral: true,
+			})
+		}
+	}
 })
 
 client.login(process.env.DISCORD_TOKEN)

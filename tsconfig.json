@@ -5,7 +5,8 @@
 		"target": "ESNext",
 		"moduleResolution": "node",
 		"sourceMap": true,
-		"outDir": "dist"
+		"outDir": "dist",
+		"types": ["./src/Types/Types.d.ts"],
 	},
 	"lib": ["ESNext"]
 }

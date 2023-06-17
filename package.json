@@ -14,5 +14,8 @@
 		"typescript"
 	],
 	"author": "kennarddh",
-	"license": "MIT"
+	"license": "MIT",
+	"dependencies": {
+		"discord.js": "^14.11.0"
+	}
 }

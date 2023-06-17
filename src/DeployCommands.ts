@@ -22,7 +22,11 @@ try {
 		{ body: commands }
 	)
 
-	console.log(`Successfully reloaded ${(data as any).length} application (/) commands.`)
+	console.log(
+		`Successfully reloaded ${
+			(data as any).length
+		} application (/) commands.`
+	)
 } catch (error) {
 	// And of course, make sure you catch and log any errors!
 	console.error(error)

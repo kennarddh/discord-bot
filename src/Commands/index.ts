@@ -1,5 +1,6 @@
 import Hi from './Hi.js'
+import Sudo from './Sudo.js'
 
-const Commands = [Hi]
+const Commands = [Hi, Sudo]
 
 export default Commands

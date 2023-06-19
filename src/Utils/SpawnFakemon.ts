@@ -18,7 +18,7 @@ const SpawnFakemon = async (id?: number) => {
 		.map(part => `${part.slice(0, 1).toUpperCase()}${part.substring(1)}`)
 		.join(' ')
 
-	const imageUrl = `https://server.poketwo.io/image?time=day&species=${speciesId}`
+	const imageUrl = pokeApiResult.sprites.front_default
 
 	const hint = RandomlyReplaceCharacters(name, 0.5)
 

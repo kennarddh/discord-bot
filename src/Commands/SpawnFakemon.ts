@@ -47,12 +47,6 @@ const SpawnFakemon: ICommand = {
 
 		interaction.reply({ content: 'Okay', ephemeral: true })
 
-		Fakemon.pendingCatchSpecies = {
-			id: speciesId,
-			name,
-			hint: RandomlyReplaceCharacters(name, 0.5),
-		}
-
 		const exampleEmbed = new EmbedBuilder()
 			.setColor(0xfe9ac9)
 			.setTitle(
@@ -66,6 +60,12 @@ const SpawnFakemon: ICommand = {
 				`Guess the fakemon and type \`@${interaction.client.user.username} catch <fakemon>\` to catch it!`
 			)
 			.setImage(imageUrl)
+
+		Fakemon.pendingCatchSpecies = {
+			id: speciesId,
+			name,
+			hint: RandomlyReplaceCharacters(name, 0.5),
+		}
 
 		interaction.channel.send({
 			embeds: [exampleEmbed],

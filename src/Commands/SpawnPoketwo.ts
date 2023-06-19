@@ -2,6 +2,7 @@ import { EmbedBuilder, SlashCommandBuilder } from 'discord.js'
 
 import { ICommand } from './Types'
 import SendAsOtherPerson from '../Utils/SendAsOtherPerson.js'
+import RandomInt from '../Utils/RandomInt.js'
 
 const SpawnPoketwo: ICommand = {
 	data: new SlashCommandBuilder()
@@ -16,13 +17,11 @@ const SpawnPoketwo: ICommand = {
 				.setMinValue(1)
 		) as SlashCommandBuilder,
 	async execute(interaction) {
-		const speciesId = (interaction.options as any).getInteger(
-			'species-id'
-		) as number | undefined
+		const speciesId =
+			(interaction.options as any).getInteger('species-id') ||
+			(RandomInt(1, 1010) as number)
 
-		const imageUrl = `https://server.poketwo.io/image?time=day&${
-			speciesId ? `species=${speciesId}` : `t=${Math.random()}`
-		}`
+		const imageUrl = `https://server.poketwo.io/image?time=day&species=${speciesId}`
 
 		const poketwoId = process.env.POKETWO_ID
 

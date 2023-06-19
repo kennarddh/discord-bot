@@ -1,6 +1,7 @@
-import { Guild, SlashCommandBuilder, TextChannel } from 'discord.js'
+import { SlashCommandBuilder } from 'discord.js'
 
 import { ICommand } from './Types'
+import SendAsOtherPerson from '../Utils/SendAsOtherPerson.js'
 
 const Sudo: ICommand = {
 	data: new SlashCommandBuilder()
@@ -24,32 +25,19 @@ const Sudo: ICommand = {
 			'message'
 		) as string
 
-		const member = await interaction.guild.members.fetch(otherUser.id)
-
-		const name = member.displayName || member.nickname || otherUser.username
-
 		interaction.reply({ content: 'Okay', ephemeral: true })
 
-		const webhook = await (interaction.channel as TextChannel)
-			.createWebhook({
-				name: name,
-				avatar: member.displayAvatarURL(),
-			})
-			.catch(() => {
-				interaction.reply({ content: 'Error', ephemeral: true })
-			})
-
-		if (!webhook) return
-
-		try {
-			await webhook.send({
+		SendAsOtherPerson(
+			interaction.guild,
+			interaction.channel,
+			otherUser.id,
+			{
 				content: message,
-			})
-
-			await webhook.delete()
-		} catch {
-			interaction.reply({ content: 'Error', ephemeral: true })
-		}
+			},
+			() => {
+				interaction.reply({ content: 'Error', ephemeral: true })
+			}
+		)
 	},
 }
 

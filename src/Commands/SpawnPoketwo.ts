@@ -1,6 +1,7 @@
-import { EmbedBuilder, SlashCommandBuilder, TextChannel } from 'discord.js'
+import { EmbedBuilder, SlashCommandBuilder } from 'discord.js'
 
 import { ICommand } from './Types'
+import SendAsOtherPerson from '../Utils/SendAsOtherPerson.js'
 
 const SpawnPoketwo: ICommand = {
 	data: new SlashCommandBuilder()
@@ -23,24 +24,9 @@ const SpawnPoketwo: ICommand = {
 			speciesId ? `species=${speciesId}` : `t=${Math.random()}`
 		}`
 
-		const poketwoId = '716390085896962058'
-
-		const member = await interaction.guild.members.fetch(poketwoId)
-
-		const name = member.displayName || member.nickname
+		const poketwoId = process.env.POKETWO_ID
 
 		interaction.reply({ content: 'Okay', ephemeral: true })
-
-		const webhook = await (interaction.channel as TextChannel)
-			.createWebhook({
-				name: name,
-				avatar: member.displayAvatarURL(),
-			})
-			.catch(() => {
-				interaction.reply({ content: 'Error', ephemeral: true })
-			})
-
-		if (!webhook) return
 
 		const exampleEmbed = new EmbedBuilder()
 			.setColor(0xfe9ac9)
@@ -50,15 +36,17 @@ const SpawnPoketwo: ICommand = {
 			)
 			.setImage(imageUrl)
 
-		try {
-			await webhook.send({
+		SendAsOtherPerson(
+			interaction.guild,
+			interaction.channel,
+			poketwoId,
+			{
 				embeds: [exampleEmbed],
-			})
-
-			await webhook.delete()
-		} catch {
-			interaction.reply({ content: 'Error', ephemeral: true })
-		}
+			},
+			() => {
+				interaction.reply({ content: 'Error', ephemeral: true })
+			}
+		)
 	},
 }
 

@@ -5,6 +5,7 @@ import { Client, Collection, Events, GatewayIntentBits } from 'discord.js'
 import { ICommand } from './Commands/Types.js'
 import Commands from './Commands/index.js'
 import ParseFakemon from './Messages/ParseFakemon.js'
+import SetupFakemonSpawnTimer from './Ready/SetupFakemonSpawnTimer.js'
 
 // Create a new client instance
 const client = new Client({
@@ -39,6 +40,8 @@ for (const command of Commands) {
 
 client.once(Events.ClientReady, botClient => {
 	console.log(`Ready! Logged in as ${botClient.user.tag}`)
+
+	SetupFakemonSpawnTimer(client)
 })
 
 client.on(Events.InteractionCreate, async interaction => {
@@ -55,6 +58,7 @@ client.on(Events.InteractionCreate, async interaction => {
 		await command.execute(interaction)
 	} catch (error) {
 		console.error(error)
+
 		if (interaction.replied || interaction.deferred) {
 			await interaction.followUp({
 				content: 'There was an error while executing this command!',

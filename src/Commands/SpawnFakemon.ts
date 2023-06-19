@@ -19,12 +19,6 @@ const SpawnFakemon: ICommand = {
 				.setMinValue(1)
 		) as SlashCommandBuilder,
 	async execute(interaction) {
-		if (Fakemon.pendingCatchSpecies)
-			return void interaction.reply({
-				content: 'Error pending catch already spawned',
-				ephemeral: true,
-			})
-
 		const speciesId =
 			(interaction.options as any).getInteger('species-id') ||
 			(RandomInt(1, 1010) as number)
@@ -53,9 +47,21 @@ const SpawnFakemon: ICommand = {
 
 		interaction.reply({ content: 'Okay', ephemeral: true })
 
+		Fakemon.pendingCatchSpecies = {
+			id: speciesId,
+			name,
+			hint: RandomlyReplaceCharacters(name, 0.5),
+		}
+
 		const exampleEmbed = new EmbedBuilder()
 			.setColor(0xfe9ac9)
-			.setTitle('A wild fakemon has appeared!')
+			.setTitle(
+				`${
+					Fakemon.pendingCatchSpecies
+						? `Wild ${Fakemon.pendingCatchSpecies.name} fled. `
+						: ''
+				}A wild fakemon has appeared!`
+			)
 			.setDescription(
 				`Guess the fakemon and type \`@${interaction.client.user.username} catch <fakemon>\` to catch it!`
 			)
@@ -64,12 +70,6 @@ const SpawnFakemon: ICommand = {
 		interaction.channel.send({
 			embeds: [exampleEmbed],
 		})
-
-		Fakemon.pendingCatchSpecies = {
-			id: speciesId,
-			name,
-			hint: RandomlyReplaceCharacters(name, 0.5),
-		}
 	},
 }
 

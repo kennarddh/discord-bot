@@ -11,7 +11,15 @@ const ParseFakePoketwo = (message: Message<boolean>, commands: string[]) => {
 			Poketwo.pendingCatchSpecies.name.toLowerCase() !==
 			guess.toLowerCase()
 		)
-			return
+			return SendAsOtherPerson(
+				message.guild,
+				message.channel,
+				process.env.POKETWO_ID,
+				{
+					content: `That is the wrong pokémon!`,
+				},
+				() => {}
+			)
 
 		SendAsOtherPerson(
 			message.guild,

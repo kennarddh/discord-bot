@@ -25,7 +25,7 @@ const ParseFakemon = (message: Message<boolean>, commands: string[]) => {
 		Fakemon.pendingCatchSpecies = null
 	} else if (commands[0] === 'hint' && Fakemon.pendingCatchSpecies) {
 		message.channel.send({
-			content: `The fakemon is ${Fakemon.pendingCatchSpecies.hint}.`,
+			content: `The fakemon is \`${Fakemon.pendingCatchSpecies.hint}\`.`,
 		})
 	}
 }

@@ -1,9 +1,9 @@
-interface IPoketwo {
+interface IFakemon {
 	pendingCatchSpecies: { id: number; name: string; hint: string } | null
 }
 
-const Poketwo: IPoketwo = {
+const Fakemon: IFakemon = {
 	pendingCatchSpecies: null,
 }
 
-export default Poketwo
+export default Fakemon

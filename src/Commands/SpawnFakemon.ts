@@ -3,13 +3,13 @@ import { EmbedBuilder, SlashCommandBuilder } from 'discord.js'
 import { ICommand } from './Types'
 import SendAsOtherPerson from '../Utils/SendAsOtherPerson.js'
 import RandomInt from '../Utils/RandomInt.js'
-import Poketwo from '../Data/Poketwo.js'
+import Fakemon from '../Data/Fakemon.js'
 import RandomlyReplaceCharacters from '../Utils/RandomlyReplaceCharacters.js'
 
-const SpawnPoketwo: ICommand = {
+const SpawnFakemon: ICommand = {
 	data: new SlashCommandBuilder()
-		.setName('spawn-poketwo')
-		.setDescription('Spawn Poketwo Pokemon')
+		.setName('spawn-fakemon')
+		.setDescription('Spawn Fakemon')
 		.addIntegerOption(option =>
 			option
 				.setRequired(false)
@@ -19,7 +19,7 @@ const SpawnPoketwo: ICommand = {
 				.setMinValue(1)
 		) as SlashCommandBuilder,
 	async execute(interaction) {
-		if (Poketwo.pendingCatchSpecies)
+		if (Fakemon.pendingCatchSpecies)
 			return void interaction.reply({
 				content: 'Error pending catch already spawned',
 				ephemeral: true,
@@ -51,31 +51,21 @@ const SpawnPoketwo: ICommand = {
 
 		const imageUrl = `https://server.poketwo.io/image?time=day&species=${speciesId}`
 
-		const poketwoId = process.env.POKETWO_ID
-
 		interaction.reply({ content: 'Okay', ephemeral: true })
 
 		const exampleEmbed = new EmbedBuilder()
 			.setColor(0xfe9ac9)
-			.setTitle('A wild pokémon has appeared!')
+			.setTitle('A wild fakemon has appeared!')
 			.setDescription(
-				'Guess the pokémon and type `@Pokétwo#8236 catch <pokémon>` to catch it!'
+				`Guess the fakemon and type \`@${interaction.client.user.username} catch <fakemon>\` to catch it!`
 			)
 			.setImage(imageUrl)
 
-		await SendAsOtherPerson(
-			interaction.guild,
-			interaction.channel,
-			poketwoId,
-			{
-				embeds: [exampleEmbed],
-			},
-			() => {
-				interaction.reply({ content: 'Error', ephemeral: true })
-			}
-		)
+		interaction.channel.send({
+			embeds: [exampleEmbed],
+		})
 
-		Poketwo.pendingCatchSpecies = {
+		Fakemon.pendingCatchSpecies = {
 			id: speciesId,
 			name,
 			hint: RandomlyReplaceCharacters(name, 0.5),
@@ -83,4 +73,4 @@ const SpawnPoketwo: ICommand = {
 	},
 }
 
-export default SpawnPoketwo
+export default SpawnFakemon

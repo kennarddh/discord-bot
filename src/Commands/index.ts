@@ -1,7 +1,7 @@
 import Hi from './Hi.js'
-import SpawnPoketwo from './SpawnPoketwo.js'
+import SpawnFakemon from './SpawnFakemon.js'
 import Sudo from './Sudo.js'
 
-const Commands = [Hi, Sudo, SpawnPoketwo]
+const Commands = [Hi, Sudo, SpawnFakemon]
 
 export default Commands

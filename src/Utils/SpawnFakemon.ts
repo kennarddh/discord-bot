@@ -1,7 +1,14 @@
+import { fileURLToPath } from 'url'
+import path from 'path'
+import { Canvas, loadImage } from 'canvas'
+
 import Fakemon, { ISpecies } from '../Data/Fakemon.js'
 import RandomInt from './RandomInt.js'
 import RandomlyReplaceCharacters from './RandomlyReplaceCharacters.js'
-import { Canvas, loadImage } from 'canvas'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
 const SpawnFakemon = async (id?: number): Promise<ISpecies | undefined> => {
 	const speciesId = id || RandomInt(1, 1010)
 
@@ -21,14 +28,20 @@ const SpawnFakemon = async (id?: number): Promise<ISpecies | undefined> => {
 	const imageUrl = pokeApiResult.sprites.front_default
 
 	const image = await loadImage(imageUrl).catch(() => {})
+	const background = await loadImage(
+		path.resolve(__dirname, '../../public/pokemon-background.png')
+	).catch(() => {})
 
 	if (!image) return
+	if (!background) return
 
-	const canvas = new Canvas(500, 500)
+	const canvas = new Canvas(800, 450)
 
 	const ctx = canvas.getContext('2d')
 
-	ctx.drawImage(image, 0, 0, 500, 500)
+	ctx.drawImage(background, 0, 0, 800, 450)
+
+	ctx.drawImage(image, 250, 0, 500, 500)
 
 	const scaledImage = canvas.toBuffer()
 

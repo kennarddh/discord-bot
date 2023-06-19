@@ -43,7 +43,7 @@ const SpawnPoketwo: ICommand = {
 		const pokeApiResult = await pokeApiResultRaw.json()
 
 		const name = (pokeApiResult.name as string)
-			.split(' ')
+			.split('-')
 			.map(
 				part => `${part.slice(0, 1).toUpperCase()}${part.substring(1)}`
 			)

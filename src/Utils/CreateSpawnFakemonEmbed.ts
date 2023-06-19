@@ -1,11 +1,13 @@
-import { Client, EmbedBuilder } from 'discord.js'
+import { Client, EmbedBuilder, AttachmentBuilder } from 'discord.js'
 
 const CreateSpawnFakemonEmbed = (
 	client: Client,
-	imageUrl: string,
+	imageBuffer: Buffer,
 	prevPendingName?: string
 ) => {
-	return new EmbedBuilder()
+	const image = new AttachmentBuilder(imageBuffer).setName('image.png')
+
+	const embed = new EmbedBuilder()
 		.setColor(0xfe9ac9)
 		.setTitle(
 			`${
@@ -15,7 +17,12 @@ const CreateSpawnFakemonEmbed = (
 		.setDescription(
 			`Guess the fakemon and type \`${client.user.toString()} catch <fakemon>\` to catch it!`
 		)
-		.setImage(imageUrl)
+		.setImage('attachment://image.png')
+
+	return {
+		embed,
+		files: [image],
+	}
 }
 
 export default CreateSpawnFakemonEmbed

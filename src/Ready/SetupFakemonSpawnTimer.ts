@@ -23,7 +23,7 @@ const SetupFakemonSpawnTimer = (client: Client) => {
 
 		const embed = CreateSpawnFakemonEmbed(
 			client,
-			result.imageUrl,
+			result.image,
 			prevPendingName
 		)
 
@@ -80,7 +80,8 @@ const SetupFakemonSpawnTimer = (client: Client) => {
 			if (!textChannel) continue
 
 			textChannel.send({
-				embeds: [embed],
+				embeds: [embed.embed],
+				files: embed.files,
 			})
 		}
 	}, spawnEvery)

@@ -1,4 +1,4 @@
-import {  SlashCommandBuilder } from 'discord.js'
+import { SlashCommandBuilder } from 'discord.js'
 
 import { ICommand } from './Types'
 import Fakemon from '../Data/Fakemon.js'
@@ -26,12 +26,12 @@ const SpawnFakemon: ICommand = {
 			| string
 			| undefined
 
-		let imageUrl: string
+		let image: Buffer
 
 		try {
 			const result = await SpawnFakemonUtil(speciesId)
 
-			imageUrl = result.imageUrl
+			image = result.image
 		} catch {
 			return void interaction.reply({
 				content: 'Error fetching poke api',
@@ -43,12 +43,13 @@ const SpawnFakemon: ICommand = {
 
 		const embed = CreateSpawnFakemonEmbed(
 			interaction.client,
-			imageUrl,
+			image,
 			prevPendingName
 		)
 
 		interaction.channel.send({
-			embeds: [embed],
+			embeds: [embed.embed],
+			files: embed.files,
 		})
 	},
 }

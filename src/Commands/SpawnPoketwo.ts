@@ -5,11 +5,23 @@ import { ICommand } from './Types'
 const SpawnPoketwo: ICommand = {
 	data: new SlashCommandBuilder()
 		.setName('spawn-poketwo')
-		.setDescription('Spawn Poketwo Pokemon'),
+		.setDescription('Spawn Poketwo Pokemon')
+		.addIntegerOption(option =>
+			option
+				.setRequired(false)
+				.setName('species-id')
+				.setDescription('Species Id')
+				.setMaxValue(1010)
+				.setMinValue(1)
+		) as SlashCommandBuilder,
 	async execute(interaction) {
-		const imageUrl = `https://server.poketwo.io/image?time=day&t=${
-			Math.random() * 1000
-		}` // Use param `t` to bypass discord cache
+		const speciesId = (interaction.options as any).getInteger(
+			'species-id'
+		) as number | undefined
+
+		const imageUrl = `https://server.poketwo.io/image?time=day&${
+			speciesId ? `species=${speciesId}` : `t=${Math.random()}`
+		}`
 
 		const poketwoId = '716390085896962058'
 

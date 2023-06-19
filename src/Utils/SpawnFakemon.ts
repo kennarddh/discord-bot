@@ -1,13 +1,10 @@
-import { fileURLToPath } from 'url'
 import path from 'path'
 import { Canvas, loadImage } from 'canvas'
 
 import Fakemon, { ISpecies } from '../Data/Fakemon.js'
 import RandomInt from './RandomInt.js'
 import RandomlyReplaceCharacters from './RandomlyReplaceCharacters.js'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+import GetPublicDir from './GetPublicDir.js'
 
 const SpawnFakemon = async (id?: number): Promise<ISpecies | undefined> => {
 	const speciesId = id || RandomInt(1, 1010)
@@ -29,7 +26,7 @@ const SpawnFakemon = async (id?: number): Promise<ISpecies | undefined> => {
 
 	const image = await loadImage(imageUrl).catch(() => {})
 	const background = await loadImage(
-		path.resolve(__dirname, '../../public/pokemon-background.png')
+		path.join(GetPublicDir(), 'pokemon-background.png')
 	).catch(() => {})
 
 	if (!image) return

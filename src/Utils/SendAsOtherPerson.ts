@@ -1,4 +1,9 @@
-import { Channel, Guild, WebhookMessageCreateOptions, TextChannel } from 'discord.js'
+import {
+	Channel,
+	Guild,
+	WebhookMessageCreateOptions,
+	TextChannel,
+} from 'discord.js'
 
 const SendAsOtherPerson = async (
 	guild: Guild,

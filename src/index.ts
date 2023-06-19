@@ -4,6 +4,7 @@ import { Client, Collection, Events, GatewayIntentBits } from 'discord.js'
 
 import { ICommand } from './Commands/Types.js'
 import Commands from './Commands/index.js'
+import ParseFakePoketwo from './Messages/ParseFakePoketwo.js'
 
 // Create a new client instance
 const client = new Client({
@@ -65,6 +66,18 @@ client.on(Events.InteractionCreate, async interaction => {
 				ephemeral: true,
 			})
 		}
+	}
+})
+
+client.on(Events.MessageCreate, message => {
+	const poketwoId = process.env.POKETWO_ID
+
+	if (message.content.startsWith(`<@${poketwoId}>`)) {
+		const command = message.content.substring(poketwoId.length + 3).trim()
+
+		const commandParts = command.split(' ')
+
+		ParseFakePoketwo(message,commandParts)
 	}
 })
 

@@ -1,5 +1,5 @@
 interface IPoketwo {
-	pendingCatchSpecies: { id: number; name: string } | null
+	pendingCatchSpecies: { id: number; name: string; hint: string } | null
 }
 
 const Poketwo: IPoketwo = {

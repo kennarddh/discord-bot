@@ -2,6 +2,7 @@ import { Message } from 'discord.js'
 import SendAsOtherPerson from '../Utils/SendAsOtherPerson.js'
 import Poketwo from '../Data/Poketwo.js'
 import RandomInt from '../Utils/RandomInt.js'
+import RandomlyReplaceCharacters from '../Utils/RandomlyReplaceCharacters.js'
 
 const ParseFakePoketwo = (message: Message<boolean>, commands: string[]) => {
 	if (commands[0] === 'catch' && commands[1] && Poketwo.pendingCatchSpecies) {
@@ -36,6 +37,16 @@ const ParseFakePoketwo = (message: Message<boolean>, commands: string[]) => {
 		)
 
 		Poketwo.pendingCatchSpecies = null
+	} else if (commands[0] === 'hint' && Poketwo.pendingCatchSpecies) {
+		SendAsOtherPerson(
+			message.guild,
+			message.channel,
+			process.env.POKETWO_ID,
+			{
+				content: `The pokémon is ${Poketwo.pendingCatchSpecies.hint}.`,
+			},
+			() => {}
+		)
 	}
 }
 

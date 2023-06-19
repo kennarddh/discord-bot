@@ -4,6 +4,7 @@ import { ICommand } from './Types'
 import SendAsOtherPerson from '../Utils/SendAsOtherPerson.js'
 import RandomInt from '../Utils/RandomInt.js'
 import Poketwo from '../Data/Poketwo.js'
+import RandomlyReplaceCharacters from '../Utils/RandomlyReplaceCharacters.js'
 
 const SpawnPoketwo: ICommand = {
 	data: new SlashCommandBuilder()
@@ -74,7 +75,11 @@ const SpawnPoketwo: ICommand = {
 			}
 		)
 
-		Poketwo.pendingCatchSpecies = { id: speciesId, name }
+		Poketwo.pendingCatchSpecies = {
+			id: speciesId,
+			name,
+			hint: RandomlyReplaceCharacters(name, 0.5),
+		}
 	},
 }
 

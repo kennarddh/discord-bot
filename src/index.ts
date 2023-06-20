@@ -2,6 +2,8 @@ import 'dotenv/config'
 
 import { Client, Collection, Events, GatewayIntentBits } from 'discord.js'
 
+import './Database/index.js'
+
 import { ICommand } from './Commands/Types.js'
 import Commands from './Commands/index.js'
 import ParseFakemon from './Messages/ParseFakemon.js'

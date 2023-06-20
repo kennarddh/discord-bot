@@ -22,6 +22,7 @@ const Create: ICreate = ({ id }) =>
 
 				const userResolve: IUser = {
 					id: user.id,
+					fakemons: user.fakemons,
 				}
 
 				resolve({ user: userResolve })

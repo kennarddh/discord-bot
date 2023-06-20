@@ -1,8 +1,8 @@
-import User, { IFakemon, IUser } from '../../Models/User.js'
+import User, { IFakemons, IUser } from '../../Models/User.js'
 
 interface ICreateParameters {
 	id: string
-	fakemons: IFakemon[]
+	fakemons: IFakemons
 }
 
 interface IResolve {

@@ -1,29 +1,37 @@
+import { UUID, randomUUID } from 'crypto'
+
 import User, { IFakemon } from '../../Models/User.js'
 
 interface ICreateParameters {
-	id: string
+	userId: string
 	fakemon: IFakemon
 }
 
-type ICreate = (options: ICreateParameters) => Promise<void>
+type ICreate = (options: ICreateParameters) => Promise<UUID>
 
-const AddUserFakemon: ICreate = ({ id, fakemon }) =>
-	new Promise<void>((resolve, reject) => {
-		User.updateOne({ _id: id }, { $push: { fakemons: fakemon } })
+const AddUserFakemon: ICreate = ({ userId, fakemon }) =>
+	new Promise<UUID>((resolve, reject) => {
+		const id = randomUUID()
+
+		User.updateOne(
+			{ _id: userId },
+			{ $set: { [`fakemons.${id}`]: fakemon } }
+		)
 			.then(user => {
 				if (user.matchedCount !== 1) return reject({ code: 404 })
 				if (!user.acknowledged) return reject({ code: 500 })
 
 				console.info('Add fakemon user success', {
-					_id: id,
+					userId,
+					id,
 				})
 
-				resolve()
+				resolve(id)
 			})
 			.catch(error => {
 				console.error('Add fakemon user to database failed', {
+					userId,
 					id,
-					error,
 				})
 
 				reject({ code: 500 })

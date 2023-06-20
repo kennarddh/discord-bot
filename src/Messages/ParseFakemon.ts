@@ -83,12 +83,22 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 
 			const createResult = await CreateUser({
 				id: message.author.id,
-				fakemons: [
-					{ id: starterFakemonid, experience: LevelToExperience(5) },
-				],
+				fakemons: new Map(),
 			}).catch(error => console.log(error))
 
 			if (!createResult)
+				return message.reply(await CreateErrorMessage(message.client))
+
+			const addFakemonResult = await AddUserFakemon({
+				userId: createResult.user._id,
+				fakemon: {
+					speciesId: starterFakemonid,
+					experience: LevelToExperience(5),
+					originalTrainer: createResult.user._id,
+				},
+			})
+
+			if (!addFakemonResult)
 				return message.reply(await CreateErrorMessage(message.client))
 
 			const imageUrl = fakemon.sprites.front_default
@@ -144,10 +154,11 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 
 		try {
 			await AddUserFakemon({
-				id: message.author.id,
+				userId: message.author.id,
 				fakemon: {
-					id: Fakemon.pendingCatchSpecies.id,
+					speciesId: Fakemon.pendingCatchSpecies.id,
 					experience: LevelToExperience(level),
+					originalTrainer: user._id,
 				},
 			})
 			await AddUserFakecoins({
@@ -179,8 +190,9 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 			content: `<@${message.author.id}>'s fakecoins is ${user.fakecoins}`,
 		})
 	} else if (commands[0] === 'fakemon') {
+		const fakemonValues = [...user.fakemons.values()]
 		const fakemons = await Pokedex.getPokemonByName(
-			user.fakemons.map(fakemon => fakemon.id)
+			fakemonValues.map(fakemon => fakemon.speciesId)
 		).catch(error => console.log(error))
 
 		if (!fakemons)
@@ -190,7 +202,7 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 			index,
 			name: FormatPokeApiName(fakemon.name),
 			level: Math.round(
-				ExperienceToLevel(user.fakemons[index].experience)
+				ExperienceToLevel(fakemonValues[index].experience)
 			),
 		}))
 

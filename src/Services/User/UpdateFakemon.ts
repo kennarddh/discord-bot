@@ -1,8 +1,10 @@
+import { UUID } from 'crypto'
+
 import User, { IFakemon } from '../../Models/User.js'
 
 interface IUpdateUserFakemonParameters {
 	userId: string
-	fakemonIndex: number
+	fakemonId: UUID
 	fakemon: Partial<IFakemon>
 }
 
@@ -12,13 +14,13 @@ type IUpdateUserFakemon = (
 
 const UpdateUserFakemon: IUpdateUserFakemon = ({
 	userId,
-	fakemonIndex,
+	fakemonId,
 	fakemon,
 }) =>
 	new Promise<void>((resolve, reject) => {
 		User.updateOne(
 			{ _id: userId },
-			{ $addFields: { [`fakemons.${fakemonIndex}`]: fakemon } }
+			{ $addFields: { [`fakemons.${fakemonId}`]: fakemon } }
 		)
 			.then(user => {
 				if (user.matchedCount !== 1) return reject({ code: 404 })

@@ -1,6 +1,4 @@
-import { Types } from 'mongoose'
-
-import User, { IUser } from '../../Models/User'
+import User, { IUser } from '../../Models/User.js'
 
 interface IFindByIdParameters {
 	id: string

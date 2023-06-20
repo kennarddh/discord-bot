@@ -75,7 +75,9 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 
 			const createResult = await CreateUser({
 				id: message.author.id,
-				fakemons: [{ id: starterFakemonid, experience: 0 }],
+				fakemons: [
+					{ id: starterFakemonid, experience: LevelToExperience(5) },
+				],
 			}).catch(error => console.log(error))
 
 			if (!createResult)

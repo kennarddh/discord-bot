@@ -10,6 +10,7 @@ import GenerateFakemonImage from '../Utils/GenerateFakemonImage.js'
 import CreateUser from '../Services/User/Create.js'
 import AddUserFakemon from '../Services/User/AddFakemon.js'
 import { LevelToExperience } from '../Utils/ExperienceLevel.js'
+import AddUserFakecoins from '../Services/User/AddFakecoins.js'
 
 const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 	let isUserExist: boolean = true
@@ -132,6 +133,8 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 
 		const level = RandomInt(1, 100)
 
+		const bonusFakecoins = 35
+
 		try {
 			await AddUserFakemon({
 				id: message.author.id,
@@ -139,6 +142,10 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 					id: Fakemon.pendingCatchSpecies.id,
 					experience: LevelToExperience(level),
 				},
+			})
+			await AddUserFakecoins({
+				id: message.author.id,
+				fakecoins: bonusFakecoins,
 			})
 		} catch ({ code }) {
 			if (typeof code !== 'number')
@@ -152,7 +159,7 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 		}
 
 		message.reply({
-			content: `Congratulations ${message.author}! You caught a level ${level} ${Fakemon.pendingCatchSpecies.name}! Added to Fakedex. You received 35 Fakecoins!`,
+			content: `Congratulations ${message.author}! You caught a level ${level} ${Fakemon.pendingCatchSpecies.name}! Added to Fakedex. You received ${bonusFakecoins} Fakecoins!`,
 		})
 
 		Fakemon.pendingCatchSpecies = null

@@ -21,12 +21,7 @@ const CreateUser: ICreate = ({ id, fakemons }) =>
 					_id: user._id,
 				})
 
-				const userResolve: IUser = {
-					_id: user._id,
-					fakemons: user.fakemons,
-				}
-
-				resolve({ user: userResolve })
+				resolve({ user: user.toObject() })
 			})
 			.catch(error => {
 				console.error('Create user to database failed', {

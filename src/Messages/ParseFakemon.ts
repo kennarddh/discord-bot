@@ -8,6 +8,8 @@ import Pokedex from '../Data/Pokedex.js'
 import FormatPokeApiName from '../Utils/FormatPokeApiName.js'
 import GenerateFakemonImage from '../Utils/GenerateFakemonImage.js'
 import CreateUser from '../Services/User/Create.js'
+import AddUserFakemon from '../Services/User/AddFakemon.js'
+import { LevelToExperience } from '../Utils/ExperienceLevel.js'
 
 const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 	let isUserExist: boolean = true
@@ -103,7 +105,10 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 				)
 				.setImage('attachment://image.png')
 
-			return message.reply({ embeds: [imageEmbed], files: [imageAttachment] })
+			return message.reply({
+				embeds: [imageEmbed],
+				files: [imageAttachment],
+			})
 		}
 	}
 
@@ -123,12 +128,29 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 				content: 'That is the wrong Fakemon!',
 			})
 
+		const level = RandomInt(1, 100)
+
+		try {
+			await AddUserFakemon({
+				id: message.author.id,
+				fakemon: {
+					id: Fakemon.pendingCatchSpecies.id,
+					experience: LevelToExperience(level),
+				},
+			})
+		} catch ({ code }) {
+			if (typeof code !== 'number')
+				return message.reply(await CreateErrorMessage(message.client))
+
+			if (code === 500)
+				return message.reply(await CreateErrorMessage(message.client))
+
+			if (code === 404)
+				return message.reply(await CreateErrorMessage(message.client))
+		}
+
 		message.reply({
-			content: `Congratulations ${
-				message.author
-			}! You caught a level ${RandomInt(1, 100)} ${
-				Fakemon.pendingCatchSpecies.name
-			}! Added to Fakedex. You received 35 Fakecoins!`,
+			content: `Congratulations ${message.author}! You caught a level ${level} ${Fakemon.pendingCatchSpecies.name}! Added to Fakedex. You received 35 Fakecoins!`,
 		})
 
 		Fakemon.pendingCatchSpecies = null

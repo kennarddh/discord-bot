@@ -8,6 +8,7 @@ export interface IFakemon {
 export interface IUser {
 	_id: string
 	fakemons: IFakemon[]
+	fakecoins: number
 }
 
 const User = new Schema<IUser>(
@@ -19,6 +20,7 @@ const User = new Schema<IUser>(
 				experience: { type: Number, required: true },
 			},
 		],
+		fakecoins: { type: Number, required: true, default: 0, min: 0 },
 	},
 	{ timestamps: true, _id: false }
 )

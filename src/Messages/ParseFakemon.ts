@@ -186,9 +186,43 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 			content: `The fakemon is \`${Fakemon.pendingCatchSpecies.hint}\`.`,
 		})
 	} else if (commands[0] === 'balance') {
-		message.reply({
-			content: `<@${message.author.id}>'s fakecoins is ${user.fakecoins}`,
-		})
+		if (!commands[1]) {
+			return message.reply({
+				content: `<@${message.author.id}>'s fakecoins is ${user.fakecoins}`,
+			})
+		}
+
+		if (
+			!(
+				commands[1].startsWith('<@') &&
+				!commands[1].startsWith('<@&') &&
+				commands[1].endsWith('>')
+			)
+		)
+			return message.reply({
+				content: `\`${commands[1]}\` is not a valid user`,
+			})
+
+		const userId = commands[1].slice(2, -1)
+
+		try {
+			const targetUser = await FindUserById({ id: userId })
+
+			return message.reply({
+				content: `<@${userId}>'s fakecoins is ${targetUser.user.fakecoins}`,
+			})
+		} catch ({ code }) {
+			if (typeof code !== 'number')
+				return message.reply(await CreateErrorMessage(message.client))
+
+			if (code === 500)
+				return message.reply(await CreateErrorMessage(message.client))
+
+			if (code === 404)
+				return message.reply(
+					`User <@${userId}> hasn't started Fakemon adventure`
+				)
+		}
 	} else if (commands[0] === 'fakemon') {
 		const fakemonValues = [...user.fakemons.values()]
 		const fakemons = await Pokedex.getPokemonByName(

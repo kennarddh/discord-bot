@@ -11,13 +11,17 @@ import CreateUser from '../Services/User/Create.js'
 import AddUserFakemon from '../Services/User/AddFakemon.js'
 import { LevelToExperience } from '../Utils/ExperienceLevel.js'
 import AddUserFakecoins from '../Services/User/AddFakecoins.js'
+import { IUser } from '../Models/User.js'
 
 const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 	let isUserExist: boolean = true
+	let user: IUser
 
 	try {
 		// Doesn't need the user just if catched then the user doesn't exist or server error
-		await FindUserById({ id: message.author.id })
+		const resolve = await FindUserById({ id: message.author.id })
+
+		user = resolve.user
 	} catch ({ code }) {
 		if (typeof code !== 'number')
 			return message.reply(await CreateErrorMessage(message.client))
@@ -166,6 +170,10 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 	} else if (commands[0] === 'hint' && Fakemon.pendingCatchSpecies) {
 		message.reply({
 			content: `The fakemon is \`${Fakemon.pendingCatchSpecies.hint}\`.`,
+		})
+	} else if (commands[0] === 'balance') {
+		message.reply({
+			content: `@${message.author.tag} fakecoins is ${user.fakecoins}`,
 		})
 	}
 }

@@ -15,7 +15,7 @@ const CreateSpawnFakemonEmbed = (
 			}A wild fakemon has appeared!`
 		)
 		.setDescription(
-			`Guess the fakemon and type \`${client.user.toString()} catch <fakemon>\` to catch it!`
+			`Guess the fakemon and type \`@${client.user.tag} catch <fakemon>\` to catch it!`
 		)
 		.setImage('attachment://image.png')
 

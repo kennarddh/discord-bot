@@ -36,7 +36,7 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 			if (!starterFakemons)
 				return message.reply(await CreateErrorMessage(message.client))
 
-			const runHelp = `Run \`<@${message.client.user.id}> pick <id>\``
+			const runHelp = `Run \`@${message.client.user.tag} pick <id>\``
 
 			const starterFakemonList = starterFakemons
 				.map(
@@ -57,7 +57,7 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 
 	if (!isUserExist)
 		return message.reply({
-			content: `Start your Fakemon adventure. Run \`<@${message.client.user.id}> start\``,
+			content: `Start your Fakemon adventure. Run \`@${message.client.user.tag} start\``,
 		})
 
 	if (commands[0] === 'catch' && commands[1] && Fakemon.pendingCatchSpecies) {

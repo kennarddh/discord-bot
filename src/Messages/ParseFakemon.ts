@@ -1,4 +1,4 @@
-import { Message } from 'discord.js'
+import { AttachmentBuilder, EmbedBuilder, Message } from 'discord.js'
 import Fakemon from '../Data/Fakemon.js'
 import RandomInt from '../Utils/RandomInt.js'
 import FindUserById from '../Services/User/FindById.js'
@@ -6,6 +6,8 @@ import CreateErrorMessage from '../Utils/CreateErrorMessage.js'
 import StarterFakemons from '../Constants/StarterFakemon.js'
 import Pokedex from '../Data/Pokedex.js'
 import FormatPokeApiName from '../Utils/FormatPokeApiName.js'
+import GenerateFakemonImage from '../Utils/GenerateFakemonImage.js'
+import CreateUser from '../Services/User/Create.js'
 
 const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 	let isUserExist: boolean = true
@@ -14,7 +16,8 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 		// Doesn't need the user just if catched then the user doesn't exist or server error
 		await FindUserById({ id: message.author.id })
 	} catch ({ code }) {
-		if (typeof code !== 'number') return
+		if (typeof code !== 'number')
+			return message.reply(await CreateErrorMessage(message.client))
 
 		if (code === 500)
 			return message.reply(await CreateErrorMessage(message.client))
@@ -31,7 +34,7 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 		if (commands[0] === 'start') {
 			const starterFakemons = await Pokedex.getPokemonByName(
 				StarterFakemons
-			).catch(() => {})
+			).catch(error => console.log(error))
 
 			if (!starterFakemons)
 				return message.reply(await CreateErrorMessage(message.client))
@@ -50,9 +53,58 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 			})
 		}
 
-		console.log(commands[0])
+		if (commands[0] === 'pick') {
+			if (typeof commands[1] === 'number')
+				return message.reply('Fakemon id must be a number')
 
-		return
+			const starterFakemonid = parseInt(commands[1], 10)
+
+			if (starterFakemonid < 1)
+				return message.reply('Fakemon id must be greater than 1')
+			if (starterFakemonid > 1010)
+				return message.reply('Fakemon id must be less than 1010')
+
+			const fakemon = await Pokedex.getPokemonByName(
+				starterFakemonid
+			).catch(error => console.log(error))
+
+			if (!fakemon)
+				return message.reply(await CreateErrorMessage(message.client))
+
+			const createResult = await CreateUser({
+				id: message.author.id,
+				fakemons: [{ id: starterFakemonid, experience: 0 }],
+			}).catch(error => console.log(error))
+
+			if (!createResult)
+				return message.reply(await CreateErrorMessage(message.client))
+
+			const imageUrl = fakemon.sprites.front_default
+
+			const image = await GenerateFakemonImage(imageUrl).catch(error =>
+				console.log(error)
+			)
+
+			if (!image)
+				return message.reply(await CreateErrorMessage(message.client))
+
+			const imageAttachment = new AttachmentBuilder(image).setName(
+				'image.png'
+			)
+
+			const imageEmbed = new EmbedBuilder()
+				.setTitle(
+					`@${message.author.tag} has started Fakemon adventure!`
+				)
+				.setDescription(
+					`Chosed ${FormatPokeApiName(
+						fakemon.name
+					)} as starter pokemon.`
+				)
+				.setImage('attachment://image.png')
+
+			return message.reply({ embeds: [imageEmbed], files: [imageAttachment] })
+		}
 	}
 
 	if (!isUserExist)

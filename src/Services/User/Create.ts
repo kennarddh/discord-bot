@@ -10,7 +10,7 @@ interface IResolve {
 
 type ICreate = (options: ICreateParameters) => Promise<IResolve>
 
-const Create: ICreate = ({ id }) =>
+const CreateUser: ICreate = ({ id }) =>
 	new Promise<IResolve>((resolve, reject) => {
 		const user = new User({ id })
 
@@ -37,4 +37,4 @@ const Create: ICreate = ({ id }) =>
 			})
 	})
 
-export default Create
+export default CreateUser

@@ -9,7 +9,10 @@ import FormatPokeApiName from '../Utils/FormatPokeApiName.js'
 import GenerateFakemonImage from '../Utils/GenerateFakemonImage.js'
 import CreateUser from '../Services/User/Create.js'
 import AddUserFakemon from '../Services/User/AddFakemon.js'
-import { LevelToExperience } from '../Utils/ExperienceLevel.js'
+import {
+	ExperienceToLevel,
+	LevelToExperience,
+} from '../Utils/ExperienceLevel.js'
 import AddUserFakecoins from '../Services/User/AddFakecoins.js'
 import { IUser } from '../Models/User.js'
 
@@ -174,6 +177,32 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 	} else if (commands[0] === 'balance') {
 		message.reply({
 			content: `@${message.author.tag} fakecoins is ${user.fakecoins}`,
+		})
+	} else if (commands[0] === 'fakemon') {
+		const fakemons = await Pokedex.getPokemonByName(
+			user.fakemons.map(fakemon => fakemon.id)
+		).catch(error => console.log(error))
+
+		if (!fakemons)
+			return message.reply(await CreateErrorMessage(message.client))
+
+		const fakemonsResult = fakemons.map((fakemon, index) => ({
+			index,
+			name: FormatPokeApiName(fakemon.name),
+			level: Math.round(
+				ExperienceToLevel(user.fakemons[index].experience)
+			),
+		}))
+
+		const list = fakemonsResult
+			.map(
+				fakemon =>
+					`\`${fakemon.index}\`. ${fakemon.name}, Level: ${fakemon.level}`
+			)
+			.join('\n')
+
+		message.reply({
+			content: `@${message.author.tag} fakemons\n\n${list}`,
 		})
 	}
 }

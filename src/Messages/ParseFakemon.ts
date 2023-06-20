@@ -3,6 +3,9 @@ import Fakemon from '../Data/Fakemon.js'
 import RandomInt from '../Utils/RandomInt.js'
 import FindUserById from '../Services/User/FindById.js'
 import CreateErrorMessage from '../Utils/CreateErrorMessage.js'
+import StarterFakemons from '../Constants/StarterFakemon.js'
+import Pokedex from '../Data/Pokedex.js'
+import FormatPokeApiName from '../Utils/FormatPokeApiName.js'
 
 const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 	let isUserExist: boolean = true
@@ -24,6 +27,28 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 			return message.reply({
 				content: `Fakemon adventure already started`,
 			})
+
+		if (commands[0] === 'start') {
+			const starterFakemons = await Pokedex.getPokemonByName(
+				StarterFakemons
+			).catch(() => {})
+
+			if (!starterFakemons)
+				return message.reply(await CreateErrorMessage(message.client))
+
+			const runHelp = `Run \`<@${message.client.user.id}> pick <id>\``
+
+			const starterFakemonList = starterFakemons
+				.map(
+					fakemon =>
+						`${fakemon.id}: ${FormatPokeApiName(fakemon.name)}`
+				)
+				.join('\n')
+
+			return message.reply({
+				content: `Pick your starter Fakemon\n\n${starterFakemonList}\n\n${runHelp}`,
+			})
+		}
 
 		console.log(commands[0])
 

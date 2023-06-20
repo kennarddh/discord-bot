@@ -6,6 +6,7 @@ import RandomInt from './RandomInt.js'
 import RandomlyReplaceCharacters from './RandomlyReplaceCharacters.js'
 import GetPublicDir from './GetPublicDir.js'
 import Pokedex from '../Data/Pokedex.js'
+import FormatPokeApiName from './FormatPokeApiName.js'
 
 const SpawnFakemon = async (id?: number): Promise<ISpecies | undefined> => {
 	const speciesId = id || RandomInt(1, 1010)
@@ -14,10 +15,7 @@ const SpawnFakemon = async (id?: number): Promise<ISpecies | undefined> => {
 
 	if (!fakemon) return
 
-	const name = fakemon.name
-		.split('-')
-		.map(part => `${part.slice(0, 1).toUpperCase()}${part.substring(1)}`)
-		.join(' ')
+	const name = FormatPokeApiName(fakemon.name)
 
 	const imageUrl = fakemon.sprites.front_default
 

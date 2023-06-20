@@ -2,6 +2,7 @@ import { Message } from 'discord.js'
 import Fakemon from '../Data/Fakemon.js'
 import RandomInt from '../Utils/RandomInt.js'
 import FindUserById from '../Services/User/FindById.js'
+import CreateErrorMessage from '../Utils/CreateErrorMessage.js'
 
 const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 	try {
@@ -10,13 +11,8 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 	} catch ({ code }) {
 		if (typeof code !== 'number') return
 
-		if (code === 500) {
-			await message.client.application.fetch().catch(() => {})
-
-			return message.reply({
-				content: `Error occurred. Try again later. If the error persists for several times. Tag ${message.client.application.owner}.`,
-			})
-		}
+		if (code === 500)
+			return message.reply(await CreateErrorMessage(message.client))
 
 		if (code === 404)
 			return message.reply({

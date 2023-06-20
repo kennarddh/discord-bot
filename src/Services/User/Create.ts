@@ -13,16 +13,16 @@ type ICreate = (options: ICreateParameters) => Promise<IResolve>
 
 const CreateUser: ICreate = ({ id, fakemons }) =>
 	new Promise<IResolve>((resolve, reject) => {
-		const user = new User({ id, fakemons })
+		const user = new User({ _id: id, fakemons })
 
 		user.save()
 			.then(() => {
 				console.info('Create user success', {
-					id: user._id,
+					_id: user._id,
 				})
 
 				const userResolve: IUser = {
-					id: user.id,
+					_id: user._id,
 					fakemons: user.fakemons,
 				}
 

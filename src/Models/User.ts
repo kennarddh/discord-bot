@@ -6,13 +6,13 @@ export interface IFakemon {
 }
 
 export interface IUser {
-	id: string
+	_id: string
 	fakemons: IFakemon[]
 }
 
 const User = new Schema<IUser>(
 	{
-		id: { type: String, required: true },
+		_id: { type: String, required: true },
 		fakemons: [
 			{
 				id: { type: Number, required: true },

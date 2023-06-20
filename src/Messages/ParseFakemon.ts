@@ -176,7 +176,7 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 		})
 	} else if (commands[0] === 'balance') {
 		message.reply({
-			content: `@${message.author.tag} fakecoins is ${user.fakecoins}`,
+			content: `<@${message.author.id}>'s fakecoins is ${user.fakecoins}`,
 		})
 	} else if (commands[0] === 'fakemon') {
 		const fakemons = await Pokedex.getPokemonByName(
@@ -202,7 +202,7 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 			.join('\n')
 
 		message.reply({
-			content: `@${message.author.tag} fakemons\n\n${list}`,
+			content: `<@${message.author.id}>'s fakemons\n\n${list}`,
 		})
 	}
 }

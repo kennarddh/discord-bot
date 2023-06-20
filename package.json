@@ -21,6 +21,7 @@
 		"canvas": "^2.11.2",
 		"discord.js": "^14.11.0",
 		"dotenv": "^16.3.0",
-		"mongoose": "^7.3.0"
+		"mongoose": "^7.3.0",
+		"pokedex-promise-v2": "^4.1.1"
 	}
 }

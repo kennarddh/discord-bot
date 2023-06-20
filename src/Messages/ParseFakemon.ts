@@ -10,10 +10,13 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 	} catch ({ code }) {
 		if (typeof code !== 'number') return
 
-		if (code === 500)
+		if (code === 500) {
+			await message.client.application.fetch().catch(() => {})
+
 			return message.reply({
-				content: `Error occurred. Try again later. If the error persists for several times. Tag <@${message.client.application.owner}>`,
+				content: `Error occurred. Try again later. If the error persists for several times. Tag ${message.client.application.owner}.`,
 			})
+		}
 
 		if (code === 404)
 			return message.reply({

@@ -1,7 +1,8 @@
-import User, { IUser } from '../../Models/User.js'
+import User, { IFakemon, IUser } from '../../Models/User.js'
 
 interface ICreateParameters {
 	id: string
+	fakemons: IFakemon[]
 }
 
 interface IResolve {
@@ -10,9 +11,9 @@ interface IResolve {
 
 type ICreate = (options: ICreateParameters) => Promise<IResolve>
 
-const CreateUser: ICreate = ({ id }) =>
+const CreateUser: ICreate = ({ id, fakemons }) =>
 	new Promise<IResolve>((resolve, reject) => {
-		const user = new User({ id })
+		const user = new User({ id, fakemons })
 
 		user.save()
 			.then(() => {

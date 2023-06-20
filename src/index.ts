@@ -77,7 +77,11 @@ client.on(Events.InteractionCreate, async interaction => {
 
 client.on(Events.MessageCreate, async message => {
 	if (message.content.startsWith(`<@${client.user.id}>`)) {
-		const commandParts = message.content.trim().split(' ').slice(1)
+		const commandParts = message.content
+			.trim()
+			.split(' ')
+			.filter(part => part !== '')
+			.slice(1)
 
 		await ParseFakemon(message, commandParts)
 	}

@@ -5,6 +5,8 @@ import FindUserById from '../Services/User/FindById.js'
 import CreateErrorMessage from '../Utils/CreateErrorMessage.js'
 
 const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
+	let isUserExist: boolean = true
+
 	try {
 		// Doesn't need the user just if catched then the user doesn't exist or server error
 		await FindUserById({ id: message.author.id })
@@ -14,11 +16,24 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 		if (code === 500)
 			return message.reply(await CreateErrorMessage(message.client))
 
-		if (code === 404)
-			return message.reply({
-				content: `Start you Fakemon adventure. Run \`<@${message.client.user.id}> start\``,
-			})
+		if (code === 404) isUserExist = false
 	}
+
+	if (commands[0] === 'start' || commands[0] === 'pick') {
+		if (isUserExist)
+			return message.reply({
+				content: `Fakemon adventure already started`,
+			})
+
+		console.log(commands[0])
+
+		return
+	}
+
+	if (!isUserExist)
+		return message.reply({
+			content: `Start your Fakemon adventure. Run \`<@${message.client.user.id}> start\``,
+		})
 
 	if (commands[0] === 'catch' && commands[1] && Fakemon.pendingCatchSpecies) {
 		const guess = commands.slice(1).join(' ')

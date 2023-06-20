@@ -5,24 +5,21 @@ import Fakemon, { ISpecies } from '../Data/Fakemon.js'
 import RandomInt from './RandomInt.js'
 import RandomlyReplaceCharacters from './RandomlyReplaceCharacters.js'
 import GetPublicDir from './GetPublicDir.js'
+import Pokedex from '../Data/Pokedex.js'
 
 const SpawnFakemon = async (id?: number): Promise<ISpecies | undefined> => {
 	const speciesId = id || RandomInt(1, 1010)
 
-	const pokeApiResultRaw = await fetch(
-		`https://pokeapi.co/api/v2/pokemon/${speciesId}`
-	)
+	const fakemon = await Pokedex.getPokemonByName(speciesId).catch(() => {})
 
-	if (!pokeApiResultRaw) return
+	if (!fakemon) return
 
-	const pokeApiResult = await pokeApiResultRaw.json()
-
-	const name = (pokeApiResult.name as string)
+	const name = fakemon.name
 		.split('-')
 		.map(part => `${part.slice(0, 1).toUpperCase()}${part.substring(1)}`)
 		.join(' ')
 
-	const imageUrl = pokeApiResult.sprites.front_default
+	const imageUrl = fakemon.sprites.front_default
 
 	const image = await loadImage(imageUrl).catch(() => {})
 	const background = await loadImage(

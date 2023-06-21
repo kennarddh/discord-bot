@@ -191,6 +191,7 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 					},
 				},
 			})
+			
 			await AddUserFakecoins({
 				id: message.author.id,
 				fakecoins: bonusFakecoins,

@@ -1,4 +1,5 @@
 import { Client, EmbedBuilder, AttachmentBuilder } from 'discord.js'
+import Fakemon from '../Data/Fakemon.js'
 
 const CreateSpawnFakemonEmbed = (
 	client: Client,
@@ -15,7 +16,7 @@ const CreateSpawnFakemonEmbed = (
 			}A wild Fakemon has appeared!`
 		)
 		.setDescription(
-			`Guess the Fakemon and type \`@${client.user.tag} catch <fakemon>\` to catch it!`
+			`Level ${Fakemon.pendingCatchSpecies.level} Fakemon with ${Fakemon.pendingCatchSpecies.individualValues}/31 individual values.\n\nGuess the Fakemon and type \`@${client.user.tag} catch <fakemon>\` to catch it!`
 		)
 		.setImage('attachment://image.png')
 

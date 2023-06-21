@@ -141,7 +141,7 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 				.setDescription(
 					`Chosed ${FormatPokeApiName(
 						fakemon.name
-					)} as starter pokemon.`
+					)} as starter Fakemon.`
 				)
 				.setImage('attachment://image.png')
 

@@ -191,7 +191,7 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 					},
 				},
 			})
-			
+
 			await AddUserFakecoins({
 				id: message.author.id,
 				fakecoins: bonusFakecoins,
@@ -374,7 +374,9 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 			.setDescription(
 				[
 					'**Details**',
-					`**XP**: ${currentXP}/${requiredXP}`,
+					`**XP**: ${
+						level >= 100 ? 'Maxed' : `${currentXP}/${requiredXP}`
+					}`,
 					`**Height**: ${fakemon.height}`,
 					`**Weight**: ${fakemon.weight}`,
 					`**Types**: ${fakemon.types

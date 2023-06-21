@@ -22,11 +22,16 @@ const SpawnFakemon = async (id?: number): Promise<ISpecies | undefined> => {
 
 	const hint = RandomlyReplaceCharacters(name, 0.5)
 
+	const level = RandomInt(1, 100)
+	const individualValues = RandomInt(0, 31)
+
 	Fakemon.pendingCatchSpecies = {
 		id: speciesId,
 		name,
 		hint,
 		image,
+		level,
+		individualValues,
 	}
 
 	return Fakemon.pendingCatchSpecies

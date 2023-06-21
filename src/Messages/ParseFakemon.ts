@@ -168,7 +168,8 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 				content: 'That is the wrong Fakemon!',
 			})
 
-		const level = RandomInt(1, 100)
+		const level = Fakemon.pendingCatchSpecies.level
+		const individualValues = Fakemon.pendingCatchSpecies.individualValues
 
 		const bonusFakecoins = 35
 
@@ -179,7 +180,7 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 					speciesId: Fakemon.pendingCatchSpecies.id,
 					experience: LevelToExperience(level),
 					originalTrainer: user._id,
-					individualValues: RandomInt(0, 31),
+					individualValues,
 					effortValues: {
 						health: 0,
 						attack: 0,
@@ -206,7 +207,7 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 		}
 
 		message.reply({
-			content: `Congratulations ${message.author}! You caught a level ${level} ${Fakemon.pendingCatchSpecies.name}! Added to Fakedex. You received ${bonusFakecoins} Fakecoins!`,
+			content: `Congratulations ${message.author}! You caught a level ${level} ${Fakemon.pendingCatchSpecies.name} with ${individualValues}/31 individual values! Added to Fakedex. You received ${bonusFakecoins} Fakecoins!`,
 		})
 
 		Fakemon.pendingCatchSpecies = null

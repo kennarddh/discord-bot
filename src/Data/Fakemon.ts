@@ -6,6 +6,8 @@ export interface ISpecies {
 	id: number
 	name: string
 	hint: string
+	individualValues: number
+	level: number
 	image: Buffer
 }
 

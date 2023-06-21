@@ -15,6 +15,10 @@ import {
 } from '../Utils/ExperienceLevel.js'
 import AddUserFakecoins from '../Services/User/AddFakecoins.js'
 import { IUser } from '../Models/User.js'
+import {
+	CalculateHealthStat,
+	CalculateOtherStat,
+} from '../Utils/CalculateStat.js'
 
 const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 	let isUserExist: boolean = true
@@ -64,10 +68,12 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 		}
 
 		if (commands[0] === 'pick') {
-			if (typeof commands[1] === 'number')
-				return message.reply('Fakemon id must be a number.')
+			if (!commands[1]) return message.reply('Fakemon id must exist.')
 
 			const starterFakemonId = parseInt(commands[1], 10)
+
+			if (Number.isNaN(starterFakemonId))
+				return message.reply('Fakemon id must be a number.')
 
 			if (starterFakemonId < 1)
 				return message.reply('Fakemon id must be greater than 1.')
@@ -75,7 +81,9 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 				return message.reply('Fakemon id must be less than 1010.')
 
 			if (!StarterFakemons.includes(starterFakemonId))
-				return message.reply('Fakemon id must be in starter Fakemon list.')
+				return message.reply(
+					'Fakemon id must be in starter Fakemon list.'
+				)
 
 			const fakemon = await Pokedex.getPokemonByName(
 				starterFakemonId
@@ -253,6 +261,130 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 		message.reply({
 			content: `<@${message.author.id}>'s fakemons\n\n${list}`,
 		})
+	} else if (commands[0] === 'info') {
+		if (!commands[1]) return message.reply('Fakemon id must exist.')
+
+		const fakemonIndex = parseInt(commands[1], 10)
+
+		if (Number.isNaN(fakemonIndex))
+			return message.reply('Fakemon id must be a number.')
+
+		if (fakemonIndex < 0)
+			return message.reply('Fakemon index cannot be smaller than 0.')
+
+		const fakemons = [...user.fakemons.values()]
+
+		if (fakemonIndex > fakemons.length - 1)
+			return message.reply(
+				`Cannot find Fakemon with index ${fakemonIndex}. Your maximum index is ${
+					fakemons.length - 1
+				}.`
+			)
+
+		const fakemonDB = fakemons[fakemonIndex]
+
+		const fakemon = await Pokedex.getPokemonByName(
+			fakemonDB.speciesId
+		).catch(error => console.log(error))
+
+		if (!fakemon)
+			return message.reply(await CreateErrorMessage(message.client))
+
+		const level = ExperienceToLevel(fakemonDB.experience)
+		const requiredXP =
+			LevelToExperience(level + 1) - LevelToExperience(level)
+		const currentXP = fakemonDB.experience - LevelToExperience(level)
+
+		const name = FormatPokeApiName(fakemon.name)
+
+		const iv = 0
+		const ev = {
+			health: 0,
+			attack: 0,
+			defense: 0,
+			specialAttack: 0,
+			specialDefense: 0,
+			speed: 0,
+		}
+
+		const health = CalculateHealthStat(
+			fakemon.stats[0].base_stat,
+			iv,
+			ev.health,
+			level
+		)
+		const attack = CalculateOtherStat(
+			fakemon.stats[1].base_stat,
+			iv,
+			ev.attack,
+			level
+		)
+		const defense = CalculateOtherStat(
+			fakemon.stats[2].base_stat,
+			iv,
+			ev.defense,
+			level
+		)
+		const specialAttack = CalculateOtherStat(
+			fakemon.stats[3].base_stat,
+			iv,
+			ev.specialAttack,
+			level
+		)
+		const specialDefense = CalculateOtherStat(
+			fakemon.stats[4].base_stat,
+			iv,
+			ev.specialDefense,
+			level
+		)
+		const speed = CalculateOtherStat(
+			fakemon.stats[5].base_stat,
+			iv,
+			ev.speed,
+			level
+		)
+
+		const imageBuffer = await GenerateFakemonImage(
+			fakemon.sprites.front_default
+		).catch(error => console.log(error))
+
+		if (!imageBuffer)
+			return message.reply(await CreateErrorMessage(message.client))
+
+		const image = new AttachmentBuilder(imageBuffer).setName('image.png')
+
+		const embed = new EmbedBuilder()
+			.setTitle(`Level ${level} ${name}`)
+			.setImage('attachment://image.png')
+			.setColor(0xfe9ac9)
+			.setDescription(
+				[
+					'**Details**',
+					`**XP**: ${currentXP}/${requiredXP}`,
+					`**Height**: ${fakemon.height}`,
+					`**Weight**: ${fakemon.weight}`,
+					`**Types**: ${fakemon.types
+						.map(type => FormatPokeApiName(type.type.name))
+						.join(', ')}`,
+					'',
+					'**Stats**',
+					`**Health**: ${health}`,
+					`**Attack**: ${attack}`,
+					`**Defense**: ${defense}`,
+					`**Special Attack**: ${specialAttack}`,
+					`**Special Defense**: ${specialDefense}`,
+					`**Speed**: ${speed}`,
+					`**Individual Values**: ${iv}/31`,
+					`**Health Effort Values**: ${ev.health}/65535`,
+					`**Attack Effort Values**: ${ev.attack}/65535`,
+					`**Defense Effort Values**: ${ev.defense}/65535`,
+					`**Special Attack Effort Values**: ${ev.specialAttack}/65535`,
+					`**Special Defense Effort Values**: ${ev.specialDefense}/65535`,
+					`**Speed Effort Values**: ${ev.speed}/65535`,
+				].join('\n')
+			)
+
+		message.reply({ embeds: [embed], files: [image] })
 	}
 }
 

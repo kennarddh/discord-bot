@@ -65,17 +65,20 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 
 		if (commands[0] === 'pick') {
 			if (typeof commands[1] === 'number')
-				return message.reply('Fakemon id must be a number')
+				return message.reply('Fakemon id must be a number.')
 
-			const starterFakemonid = parseInt(commands[1], 10)
+			const starterFakemonId = parseInt(commands[1], 10)
 
-			if (starterFakemonid < 1)
-				return message.reply('Fakemon id must be greater than 1')
-			if (starterFakemonid > 1010)
-				return message.reply('Fakemon id must be less than 1010')
+			if (starterFakemonId < 1)
+				return message.reply('Fakemon id must be greater than 1.')
+			if (starterFakemonId > 1010)
+				return message.reply('Fakemon id must be less than 1010.')
+
+			if (!StarterFakemons.includes(starterFakemonId))
+				return message.reply('Fakemon id must be in starter Fakemon list.')
 
 			const fakemon = await Pokedex.getPokemonByName(
-				starterFakemonid
+				starterFakemonId
 			).catch(error => console.log(error))
 
 			if (!fakemon)
@@ -92,7 +95,7 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 			const addFakemonResult = await AddUserFakemon({
 				userId: createResult.user._id,
 				fakemon: {
-					speciesId: starterFakemonid,
+					speciesId: starterFakemonId,
 					experience: LevelToExperience(5),
 					originalTrainer: createResult.user._id,
 				},

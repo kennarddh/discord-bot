@@ -315,15 +315,8 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 
 		const name = FormatPokeApiName(fakemon.name)
 
-		const iv = 0
-		const ev = {
-			health: 0,
-			attack: 0,
-			defense: 0,
-			specialAttack: 0,
-			specialDefense: 0,
-			speed: 0,
-		}
+		const iv = fakemonDB.individualValues
+		const ev = fakemonDB.effortValues
 
 		const health = CalculateHealthStat(
 			fakemon.stats[0].base_stat,

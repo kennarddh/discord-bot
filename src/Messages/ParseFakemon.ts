@@ -106,6 +106,15 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 					speciesId: starterFakemonId,
 					experience: LevelToExperience(5),
 					originalTrainer: createResult.user._id,
+					individualValues: RandomInt(0, 31),
+					effortValues: {
+						health: 0,
+						attack: 0,
+						defense: 0,
+						specialAttack: 0,
+						specialDefense: 0,
+						speed: 0,
+					},
 				},
 			})
 
@@ -170,6 +179,15 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 					speciesId: Fakemon.pendingCatchSpecies.id,
 					experience: LevelToExperience(level),
 					originalTrainer: user._id,
+					individualValues: RandomInt(0, 31),
+					effortValues: {
+						health: 0,
+						attack: 0,
+						defense: 0,
+						specialAttack: 0,
+						specialDefense: 0,
+						speed: 0,
+					},
 				},
 			})
 			await AddUserFakecoins({

@@ -1,4 +1,4 @@
-import mongoose, { Schema, Types } from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 
 import { UUID } from 'crypto'
 
@@ -6,6 +6,15 @@ export interface IFakemon {
 	speciesId: number
 	experience: number
 	originalTrainer: string
+	individualValues: number
+	effortValues: {
+		health: number
+		attack: number
+		defense: number
+		specialAttack: number
+		specialDefense: number
+		speed: number
+	}
 }
 
 export type IFakemons = Map<UUID, IFakemon>
@@ -25,6 +34,50 @@ const User = new Schema<IUser>(
 				{
 					speciesId: { type: Number, required: true },
 					experience: { type: Number, required: true },
+					individualValues: {
+						type: Number,
+						required: true,
+						min: 0,
+						max: 31,
+					},
+					effortValues: {
+						health: {
+							type: Number,
+							required: true,
+							min: 0,
+							max: 65535,
+						},
+						attack: {
+							type: Number,
+							required: true,
+							min: 0,
+							max: 65535,
+						},
+						defense: {
+							type: Number,
+							required: true,
+							min: 0,
+							max: 65535,
+						},
+						specialAttack: {
+							type: Number,
+							required: true,
+							min: 0,
+							max: 65535,
+						},
+						specialDefense: {
+							type: Number,
+							required: true,
+							min: 0,
+							max: 65535,
+						},
+						speed: {
+							type: Number,
+							required: true,
+							min: 0,
+							max: 65535,
+						},
+					},
 					originalTrainer: {
 						type: String,
 						ref: 'users',

@@ -214,7 +214,7 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 		Fakemon.pendingCatchSpecies = null
 	} else if (commands[0] === 'hint' && Fakemon.pendingCatchSpecies) {
 		message.reply({
-			content: `The fakemon is \`${Fakemon.pendingCatchSpecies.hint}\`.`,
+			content: `The Fakemon is \`${Fakemon.pendingCatchSpecies.hint}\`.`,
 		})
 	} else if (commands[0] === 'balance') {
 		if (!commands[1]) {

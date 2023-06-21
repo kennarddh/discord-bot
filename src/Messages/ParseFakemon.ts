@@ -267,12 +267,13 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 			level: Math.round(
 				ExperienceToLevel(fakemonValues[index].experience)
 			),
+			individualValues: fakemonValues[index].individualValues,
 		}))
 
 		const list = fakemonsResult
 			.map(
 				fakemon =>
-					`\`${fakemon.index}\`. ${fakemon.name}, Level: ${fakemon.level}`
+					`\`${fakemon.index}\`. ${fakemon.name}, Level: ${fakemon.level}/100, IV: ${fakemon.individualValues}/31`
 			)
 			.join('\n')
 

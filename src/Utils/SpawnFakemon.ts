@@ -1,6 +1,6 @@
 import Fakemon, { ISpecies } from '../Data/Fakemon.js'
 import RandomInt from './RandomInt.js'
-import RandomlyReplaceCharacters from './RandomlyReplaceCharacters.js'
+import GenerateHint from './GenerateHint.js'
 import Pokedex from '../Data/Pokedex.js'
 import FormatPokeApiName from './FormatPokeApiName.js'
 import GenerateFakemonImage from './GenerateFakemonImage.js'
@@ -20,7 +20,7 @@ const SpawnFakemon = async (id?: number): Promise<ISpecies | undefined> => {
 
 	if (!image) return
 
-	const hint = RandomlyReplaceCharacters(name, 0.5)
+	const hint = GenerateHint(name)
 
 	const level = RandomInt(1, 100)
 	const individualValues = RandomInt(0, 31)

@@ -6,7 +6,7 @@
 		"moduleResolution": "node",
 		"sourceMap": true,
 		"outDir": "dist",
-		"types": ["./src/Types/Types.d.ts"],
+		"types": ["./src/Types/Types.d.ts"]
 	},
 	"lib": ["ESNext"]
 }

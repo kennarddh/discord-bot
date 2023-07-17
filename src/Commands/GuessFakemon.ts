@@ -32,7 +32,7 @@ const GuessFakemon: ICommand = {
 		const combinedHintString = combinedHint.join('')
 
 		const hintRegex = RegExp(
-			`^${combinedHintString.replaceAll('_', '.')}$`,
+			`^${combinedHintString.replaceAll('_', '[^\\s]')}$`,
 			'i'
 		)
 

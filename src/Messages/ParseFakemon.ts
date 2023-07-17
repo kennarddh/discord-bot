@@ -255,7 +255,7 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 					`User <@${userId}> hasn't started Fakemon adventure`
 				)
 		}
-	} else if (commands[0] === 'fakemon') {
+	} else if (commands[0] === 'fakemon' || commands[0] === 'fakemons') {
 		const fakemonValues = [...user.fakemons.values()]
 		const fakemons = await Pokedex.getPokemonByName(
 			fakemonValues.map(fakemon => fakemon.speciesId)

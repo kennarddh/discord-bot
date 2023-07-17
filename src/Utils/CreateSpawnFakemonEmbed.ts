@@ -16,7 +16,7 @@ const CreateSpawnFakemonEmbed = (
 			}A wild Fakemon has appeared!`
 		)
 		.setDescription(
-			`Level ${Fakemon.pendingCatchSpecies.level} Fakemon with ${Fakemon.pendingCatchSpecies.individualValues}/31 individual values.\n\nGuess the Fakemon and type \`@${client.user.tag} catch <fakemon>\` to catch it!`
+			`Level ${Fakemon.pendingCatchSpecies.level} Fakemon.\n\nGuess the Fakemon and type \`@${client.user.tag} catch <fakemon>\` to catch it!`
 		)
 		.setImage('attachment://image.png')
 

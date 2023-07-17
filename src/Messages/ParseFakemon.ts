@@ -276,7 +276,7 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 		const list = fakemonsResult
 			.map(
 				fakemon =>
-					`\`${fakemon.index}\`. ${fakemon.name}, Level: ${fakemon.level}/100, IV: ${fakemon.individualValues}/31`
+					`\`${fakemon.index}\`. ${fakemon.name}, Level: ${fakemon.level}/100`
 			)
 			.join('\n')
 

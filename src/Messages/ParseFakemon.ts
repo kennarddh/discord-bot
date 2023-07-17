@@ -209,7 +209,7 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 		}
 
 		message.reply({
-			content: `Congratulations ${message.author}! You caught a level ${level} ${Fakemon.pendingCatchSpecies.name} with ${individualValues}/31 individual values! Added to Fakedex. You received ${bonusFakecoins} Fakecoins!`,
+			content: `Congratulations ${message.author}! You caught a level ${level}! Added to Fakedex. You received ${bonusFakecoins} Fakecoins!`,
 		})
 
 		Fakemon.pendingCatchSpecies = null

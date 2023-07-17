@@ -1,3 +1,5 @@
+import { IValues } from '../Types'
+
 export interface IFakemon {
 	pendingCatchSpecies: ISpecies | null
 }
@@ -6,7 +8,7 @@ export interface ISpecies {
 	id: number
 	name: string
 	hint: string
-	individualValues: number
+	individualValues: IValues
 	level: number
 	image: Buffer
 }

@@ -19,6 +19,7 @@ import {
 	CalculateHealthStat,
 	CalculateOtherStat,
 } from '../Utils/CalculateStat.js'
+import GenerateRandomIndividualValues from '../Utils/GenerateRandomIndividualValues.js'
 
 const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 	let isUserExist: boolean = true
@@ -106,7 +107,7 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 					speciesId: starterFakemonId,
 					experience: LevelToExperience(5),
 					originalTrainer: createResult.user._id,
-					individualValues: RandomInt(0, 31),
+					individualValues: GenerateRandomIndividualValues(),
 					effortValues: {
 						health: 0,
 						attack: 0,
@@ -323,37 +324,37 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 
 		const health = CalculateHealthStat(
 			fakemon.stats[0].base_stat,
-			iv,
+			iv.health,
 			ev.health,
 			level
 		)
 		const attack = CalculateOtherStat(
 			fakemon.stats[1].base_stat,
-			iv,
+			iv.attack,
 			ev.attack,
 			level
 		)
 		const defense = CalculateOtherStat(
 			fakemon.stats[2].base_stat,
-			iv,
+			iv.defense,
 			ev.defense,
 			level
 		)
 		const specialAttack = CalculateOtherStat(
 			fakemon.stats[3].base_stat,
-			iv,
+			iv.specialAttack,
 			ev.specialAttack,
 			level
 		)
 		const specialDefense = CalculateOtherStat(
 			fakemon.stats[4].base_stat,
-			iv,
+			iv.specialDefense,
 			ev.specialDefense,
 			level
 		)
 		const speed = CalculateOtherStat(
 			fakemon.stats[5].base_stat,
-			iv,
+			iv.speed,
 			ev.speed,
 			level
 		)

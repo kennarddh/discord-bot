@@ -4,6 +4,7 @@ import GenerateHint from './GenerateHint.js'
 import Pokedex from '../Data/Pokedex.js'
 import FormatPokeApiName from './FormatPokeApiName.js'
 import GenerateFakemonImage from './GenerateFakemonImage.js'
+import GenerateRandomIndividualValues from './GenerateRandomIndividualValues.js'
 
 const SpawnFakemon = async (id?: number): Promise<ISpecies | undefined> => {
 	const speciesId = id || RandomInt(1, 1010)
@@ -23,7 +24,6 @@ const SpawnFakemon = async (id?: number): Promise<ISpecies | undefined> => {
 	const hint = GenerateHint(name)
 
 	const level = RandomInt(1, 100)
-	const individualValues = RandomInt(0, 31)
 
 	Fakemon.pendingCatchSpecies = {
 		id: speciesId,
@@ -31,7 +31,7 @@ const SpawnFakemon = async (id?: number): Promise<ISpecies | undefined> => {
 		hint,
 		image,
 		level,
-		individualValues,
+		individualValues: GenerateRandomIndividualValues(),
 	}
 
 	return Fakemon.pendingCatchSpecies

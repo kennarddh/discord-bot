@@ -140,7 +140,7 @@ const ParseFakemon = async (message: Message<boolean>, commands: string[]) => {
 					`@${message.author.tag} has started Fakemon adventure!`
 				)
 				.setDescription(
-					`Chosed ${FormatPokeApiName(
+					`Chose ${FormatPokeApiName(
 						fakemon.name
 					)} as starter Fakemon.`
 				)

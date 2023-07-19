@@ -52,7 +52,7 @@ const Say: ICommand = {
 				)
 		}, delay)
 
-		interaction.reply('Okay')
+		interaction.reply({ content: 'Okay', ephemeral: true })
 	},
 }
 

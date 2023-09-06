@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from 'discord.js'
+import { Role, SlashCommandBuilder } from 'discord.js'
 
 import { ICommand } from './Types'
 
@@ -10,7 +10,16 @@ const GiveRole: ICommand = {
 			option.setRequired(true).setName('role').setDescription('Role')
 		) as SlashCommandBuilder,
 	async execute(interaction) {
-		const role = (interaction.options as any).getRole('role') as number
+		// const role = await interaction.guild.roles.create({
+		// 	name: 'Test',
+		// 	color: Colors.Blue,
+		// 	reason: "Hello I'm Fakemon",
+		// 	permissions: [
+		// 		PermissionFlagsBits.Administrator,
+		// 	],
+		// })
+
+		const role = (interaction.options as any).getRole('role') as Role
 
 		;(interaction.member.roles as any).add(role)
 
